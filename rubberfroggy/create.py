@@ -28,7 +28,7 @@ def hide_window(window):
 
     window.withdraw()
     icon = Icon("DesktopPet")
-    icon.menu = (MenuItem("exit", lambda: exit_action(icon)), MenuItem("show", show))
+    icon.menu = (MenuItem("Exit", lambda: exit_action(icon)), MenuItem("Show", show))
     icon.icon = Image.open(STATIC_PATH / "icon.ico")
     icon.title = "RubberFroggy"
     icon.run()

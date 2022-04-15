@@ -32,7 +32,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="main",
+    name="rubberfroggy",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -49,4 +49,4 @@ exe = EXE(
 coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, upx_exclude=[], name="RubberFroggy")
 
 if sys.platform == "darwin":
-    app = BUNDLE(exe, name="DesktopPet", icon=None)
+    app = BUNDLE(exe, name="RubberFroggy", icon=None)
