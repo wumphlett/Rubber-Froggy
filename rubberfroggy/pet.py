@@ -5,10 +5,10 @@ class Pet:
     def __init__(self, x: int, y: int, canvas: "Canvas", animator: "Animator"):
         self.x = x
         self.y = y
-        self.v_x = 0.
-        self.v_y = 0.
-        self.a_x = 0.
-        self.a_y = 0.
+        self.v_x = 0.0
+        self.v_y = 0.0
+        self.a_x = 0.0
+        self.a_y = 0.0
         self.canvas = canvas
         self.animator = animator
 
@@ -86,9 +86,21 @@ class Pet:
         self.set_animation(State.GRAB_TO_FALL)
 
     def start_hover(self, _):
-        if self.animator.state not in (State.IDLE_TO_GRABBED, State.GRABBED, State.GRAB_TO_FALL, State.FALLING, State.LANDING):
+        if self.animator.state not in (
+            State.IDLE_TO_GRABBED,
+            State.GRABBED,
+            State.GRAB_TO_FALL,
+            State.FALLING,
+            State.LANDING,
+        ):
             self.set_animation(State.IDLE_TO_QUESTION)
 
     def stop_hover(self, _):
-        if self.animator.state not in (State.IDLE_TO_GRABBED, State.GRABBED, State.GRAB_TO_FALL, State.FALLING, State.LANDING):
+        if self.animator.state not in (
+            State.IDLE_TO_GRABBED,
+            State.GRABBED,
+            State.GRAB_TO_FALL,
+            State.FALLING,
+            State.LANDING,
+        ):
             self.set_animation(State.QUESTION_TO_IDLE)

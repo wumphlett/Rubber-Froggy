@@ -86,7 +86,7 @@ class Animation:
     @staticmethod
     def load_gif(path) -> List[tk.PhotoImage]:
         path = SPRITE_PATH / path
-        open(path, 'rb')
+        open(path, "rb")
         file = Image.open(path)
         frames = [tk.PhotoImage(file=path, format=f"gif -index {i}") for i in range(file.n_frames)]
         file.close()

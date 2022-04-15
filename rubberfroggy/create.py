@@ -28,7 +28,7 @@ def hide_window(window):
 
     window.withdraw()
     icon = Icon("DesktopPet")
-    icon.menu = (MenuItem('exit', lambda: exit_action(icon)), MenuItem('show', show))
+    icon.menu = (MenuItem("exit", lambda: exit_action(icon)), MenuItem("show", show))
     icon.icon = Image.open(STATIC_PATH / "icon.ico")
     icon.title = "RubberFroggy"
     icon.run()
@@ -49,7 +49,7 @@ def create_pet() -> Pet:
     label.pack()
     window.wm_attributes("-transparentcolor", background_color)
 
-    window.wm_attributes('-topmost', True)
+    window.wm_attributes("-topmost", True)
     window.update()
 
     window.winfo_toplevel().title("RubberFroggy")
@@ -59,7 +59,7 @@ def create_pet() -> Pet:
     window.after(10, lambda: show_in_taskbar(window))
     canvas = Canvas(window, label, width=x, height=y)
 
-    window.protocol('WM_DELETE_WINDOW', lambda: hide_window(window))
+    window.protocol("WM_DELETE_WINDOW", lambda: hide_window(window))
 
     animations = Animator.get_animations(resolution)
     animator = Animator(state=State.IDLE, number=0, animations=animations)
