@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 
 from PIL import Image
@@ -40,14 +41,21 @@ def create_pet() -> Pet:
     x, y = monitor.width, monitor.height - OFFSET
     window = tk.Tk()
 
-    background_color = "#FFFFFF"
+    if sys.platform == "darwin":
+        background_color = "systemTransparent"
+    else:
+        background_color = "#FFFFFF"
 
     window.config(highlightbackground=background_color)
     label = tk.Label(window, bd=0, bg=background_color, height=resolution[0], width=resolution[1])
     window.overrideredirect(True)
     window.update_idletasks()
     label.pack()
-    window.wm_attributes("-transparent", background_color)
+
+    if sys.platform == "darwin":
+        window.wm_attributes("-transparent", True)
+    else:
+        window.wm_attributes("-transparentcolor", background_color)
 
     window.wm_attributes("-topmost", True)
     window.update()
