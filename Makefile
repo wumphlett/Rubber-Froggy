@@ -1,9 +1,12 @@
 PROJECT = 'rubberfroggy'
 
-.PHONY: build format
+.PHONY: build format main
 
 build:
-	@echo test
+	@poetry run pyinstaller main.spec --noconfirm
 
 format:
 	@poetry run black $(PROJECT)
+
+main:
+	@poetry run main
