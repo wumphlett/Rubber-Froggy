@@ -27,10 +27,15 @@ class State(Enum):
     SLEEP = auto()
     WALK_LEFT = auto()
     WALK_RIGHT = auto()
+    IDLE_TO_GRABBED = auto()
     GRABBED = auto()
     GRAB_TO_FALL = auto()
     FALLING = auto()
-    LANDED = auto()
+    LANDING = auto()
+    IDLE_TO_QUESTION = auto()
+    QUESTION_TO_IDLE = auto()
+    QUESTION = auto()
+    HEART = auto()
 
 
 class Animation:
@@ -47,6 +52,7 @@ class Animation:
         frames: List = None,
         gif: str = None,
         multiplier: int = 1,
+        reverse: bool = False,
     ):
         self.animations = animations
         self.resolution = resolution
@@ -58,6 +64,10 @@ class Animation:
         self.rep = rep
 
         frames = [self.scale_to_fit(frame, *resolution) for frame in (self.load_gif(gif) if not frames else frames)]
+
+        if reverse:
+            frames.reverse()
+
         self.frames = [frame for group in frames for frame in repeat(group, multiplier)]
 
     def next(self, animator: "Animator") -> "State":
@@ -116,65 +126,91 @@ class Animator:
 
     @staticmethod
     def get_animations(resolution: Tuple[int, int]):
-        # TODO take special care when updating these that each state is represented and that you have the proper transition states
-        standing = (
-            [State.IDLE_TO_SLEEP]
-            + list(repeat(State.IDLE, 3))
-            + list(repeat(State.WALK_LEFT, 4))
-            + list(repeat(State.WALK_RIGHT, 4))
-        )
         animations = {
+            State.IDLE_TO_QUESTION: Animation(
+                [State.QUESTION],
+                gif="idle_to_question.gif",
+                timer=200,
+                resolution=resolution,
+            ),
+            State.QUESTION: Animation(
+                [State.QUESTION],
+                gif="question.gif",
+                timer=200,
+                resolution=resolution,
+            ),
+            State.QUESTION_TO_IDLE: Animation(
+                [State.IDLE],
+                gif="idle_to_question.gif",
+                timer=200,
+                reverse=True,
+                resolution=resolution,
+            ),
             State.IDLE: Animation(
-                standing,
+                list(repeat(State.IDLE, 8)) + list(repeat(State.IDLE_TO_SLEEP, 2)) + [State.HEART],
                 gif="idle.gif",
-                timer=400,
+                timer=500,
                 resolution=resolution,
             ),
             State.IDLE_TO_SLEEP: Animation(
                 [State.SLEEP],
                 gif="idle_to_sleep.gif",
+                timer=200,
                 resolution=resolution,
             ),
             State.SLEEP: Animation(
                 list(repeat(State.SLEEP, 4)) + [State.SLEEP_TO_IDLE],
                 gif="sleep.gif",
-                timer=1000,
-                resolution=resolution
+                timer=800,
+                resolution=resolution,
             ),
             State.SLEEP_TO_IDLE: Animation(
                 [State.IDLE],
-                gif="sleep_to_idle.gif",
+                gif="idle_to_sleep.gif",
+                timer=200,
+                reverse=True,
                 resolution=resolution,
             ),
-            State.WALK_LEFT: Animation(
-                standing,
-                gif="walking_left.gif",
-                v_x=-3,
-                resolution=resolution
+            State.IDLE_TO_GRABBED: Animation(
+                [State.IDLE_TO_GRABBED],
+                gif="idle_to_grabbed.gif",
+                resolution=resolution,
             ),
-            State.WALK_RIGHT: Animation(
-                standing,
-                gif="walking_right.gif",
-                v_x=3,
-                resolution=resolution
-            ),
-            # TODO No gifs exist for the default cat rn, update when custom gifs are made
             State.GRABBED: Animation(
                 [State.GRABBED],
-                gif="walking_right.gif",
+                gif="grabbed.gif",
+                timer=400,
+                resolution=resolution,
+            ),
+            State.GRAB_TO_FALL: Animation(
+                [State.FALLING],
+                gif="grabbed_to_falling.gif",
                 timer=50,
-                resolution=resolution
+                multiplier=2,
+                v_y=4,
+                a_y=1,
+                resolution=resolution,
             ),
             State.FALLING: Animation(
                 [State.FALLING],
-                gif="walking_left.gif",
-                timer=10,
+                gif="falling.gif",
+                timer=15,
                 multiplier=2,
-                a_y=2,
+                v_y=8,
+                a_y=1,
+                resolution=resolution,
+            ),
+            State.LANDING: Animation(
+                [State.IDLE],
+                gif="landing.gif",
+                timer=150,
+                resolution=resolution,
+            ),
+            State.HEART: Animation(
+                [State.IDLE],
+                gif="heart.gif",
+                timer=150,
                 resolution=resolution,
             ),
         }
-
-        # TODO No landing gif exists for the default cat rn, update when custom gifs are made
-        animations[State.LANDED] = animations[State.IDLE]
         return animations

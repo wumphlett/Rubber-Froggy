@@ -40,7 +40,7 @@ def create_pet() -> Pet:
     x, y = monitor.width, monitor.height - OFFSET
     window = tk.Tk()
 
-    background_color = "#000"
+    background_color = "#FFFFFF"
 
     window.config(highlightbackground=background_color)
     label = tk.Label(window, bd=0, bg=background_color, height=resolution[0], width=resolution[1])
@@ -68,6 +68,8 @@ def create_pet() -> Pet:
     label.bind("<ButtonPress-1>", pet.start_hold)
     label.bind("<B1-Motion>", pet.while_hold)
     label.bind("<ButtonRelease-1>", pet.stop_hold)
+    label.bind("<Enter>", pet.start_hover)
+    label.bind("<Leave>", pet.stop_hover)
 
     window.after(1, pet.tick)
     window.mainloop()

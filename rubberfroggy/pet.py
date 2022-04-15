@@ -40,7 +40,7 @@ class Pet:
         if self.y > self.canvas.height - resolution[1]:
             self.y = self.canvas.height - resolution[1]
             if self.animator.state == State.FALLING:
-                self.set_animation(State.LANDED)
+                self.set_animation(State.LANDING)
 
     def progress(self):
         animation = self.current_animation
@@ -73,13 +73,22 @@ class Pet:
 
     # Events
     def start_hold(self, _):
-        self.set_animation(State.GRABBED)
+        self.set_animation(State.IDLE_TO_GRABBED)
 
     def while_hold(self, event):
+        self.set_animation(State.GRABBED)
         resolution = self.current_animation.resolution
         self.x = event.x_root - int(resolution[0] / 2)
         self.y = event.y_root - int(resolution[1] / 2)
         self.update_geometry()
 
     def stop_hold(self, _):
-        self.set_animation(State.FALLING)
+        self.set_animation(State.GRAB_TO_FALL)
+
+    def start_hover(self, _):
+        if self.animator.state not in (State.IDLE_TO_GRABBED, State.GRABBED, State.GRAB_TO_FALL, State.FALLING, State.LANDING):
+            self.set_animation(State.IDLE_TO_QUESTION)
+
+    def stop_hover(self, _):
+        if self.animator.state not in (State.IDLE_TO_GRABBED, State.GRABBED, State.GRAB_TO_FALL, State.FALLING, State.LANDING):
+            self.set_animation(State.QUESTION_TO_IDLE)
