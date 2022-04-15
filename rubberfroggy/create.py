@@ -47,7 +47,7 @@ def create_pet() -> Pet:
     window.overrideredirect(True)
     window.update_idletasks()
     label.pack()
-    window.wm_attributes("-transparentcolor", background_color)
+    window.wm_attributes("-transparent", background_color)
 
     window.wm_attributes("-topmost", True)
     window.update()
