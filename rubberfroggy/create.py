@@ -1,5 +1,6 @@
 import sys
 import tkinter as tk
+from tkinter import Toplevel
 
 from PIL import Image
 from pystray import Icon, MenuItem
@@ -40,23 +41,30 @@ def create_pet() -> Pet:
     resolution = (X_RES, Y_RES)
     x, y = monitor.width, monitor.height - OFFSET
     window = tk.Tk()
-    window.overrideredirect(True)
-    window.wm_attributes("-topmost", True)
 
     if sys.platform == "darwin":
-        window.wm_attributes("-transparent", True)
-        window.config(bg="systemTransparent")
-        label = tk.Label(window)
-        label.config(bg="systemTransparent")
+        toplevel = Toplevel(window)
+        toplevel.overrideredirect(True)
+        toplevel.wm_attributes("-topmost", True)
+        toplevel.update()
+        toplevel.lift()
+        toplevel.attributes("-alpha", 1)
+        toplevel.attributes("-topmost", 1)
+        toplevel.wm_attributes("-transparent", True)
+        toplevel.config(bg="systemTransparent")
+        window.attributes("-alpha", 0)
+        label = tk.Label(toplevel)
     else:
+        window.overrideredirect(True)
+        window.wm_attributes("-topmost", True)
         background_color = "#FFFFFF"
         window.config(highlightbackground=background_color)
         label = tk.Label(window, bd=0, bg=background_color, height=resolution[0], width=resolution[1])
         window.wm_attributes("-transparentcolor", background_color)
+        window.update()
 
     window.update_idletasks()
     label.pack()
-    window.update()
 
     window.winfo_toplevel().title("RubberFroggy")
     window.iconbitmap(STATIC_PATH / "icon.ico")
