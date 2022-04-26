@@ -40,24 +40,22 @@ def create_pet() -> Pet:
     resolution = (X_RES, Y_RES)
     x, y = monitor.width, monitor.height - OFFSET
     window = tk.Tk()
-
-    if sys.platform == "darwin":
-        background_color = "systemTransparent"
-    else:
-        background_color = "#FFFFFF"
-
-    window.config(highlightbackground=background_color)
-    label = tk.Label(window, bd=0, bg=background_color, height=resolution[0], width=resolution[1])
     window.overrideredirect(True)
-    window.update_idletasks()
-    label.pack()
+    window.wm_attributes("-topmost", True)
 
     if sys.platform == "darwin":
         window.wm_attributes("-transparent", True)
+        window.config(bg="systemTransparent")
+        label = tk.Label(window)
+        label.config(bg="systemTransparent")
     else:
+        background_color = "#FFFFFF"
+        window.config(highlightbackground=background_color)
+        label = tk.Label(window, bd=0, bg=background_color, height=resolution[0], width=resolution[1])
         window.wm_attributes("-transparentcolor", background_color)
 
-    window.wm_attributes("-topmost", True)
+    window.update_idletasks()
+    label.pack()
     window.update()
 
     window.winfo_toplevel().title("RubberFroggy")
